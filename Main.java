@@ -3,13 +3,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String line = sc.nextLine();
-        StringBuilder sb = new StringBuilder();
-        line = line.strip();
-        sb.append(line.toUpperCase().substring(line.lastIndexOf(' ')+1));
-        sb.append(", ");
-        sb.append(line.toUpperCase().charAt(0));
-        sb.append('.');
-        System.out.println(sb);
+        String name = sc.nextLine();
+        int qty = Integer.parseInt(sc.nextLine().trim());
+        double price = Double.parseDouble(sc.nextLine().trim());
+        price *= qty;
+
+        System.out.printf("%-12s%4d%10.2f%n",name,qty,price);
     }
 }
