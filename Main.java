@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     static boolean isPrime(int n) {
-        if (n == 0 || n == 1) {
+        if (n == 0 || n == 1 || n < 0) {
             return false;
         } else {
             boolean prime = true;
