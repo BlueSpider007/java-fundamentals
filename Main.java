@@ -1,70 +1,53 @@
 import java.util.Scanner;
 
 public class Main {
-    static class Employee {
-        protected String name;
-        protected int base;
+    interface Formatter {
+        String format(String s);
 
-        Employee(String name, int base) {
-            this.name = name;
-            this.base = base;
-        }
-
-        int monthlyPay() {
-            return base;
-        }
-
-        String describe() {
-            return name + ": " + monthlyPay();
+        // TODO: apply this formatter first, then next.
+        default Formatter andThen(Formatter next) {
+            return s -> next.format(this.format(s));
         }
     }
 
-    static class Manager extends Employee {
-        protected int team;
-
-        Manager(String name, int base, int team) {
-            super(name, base);
-            this.team = team;
-        }
-
+    static class Shout implements Formatter {
         @Override
-        int monthlyPay() {
-            return base + 500*team;
+        public String format(String s) {
+            return s.toUpperCase()+"!";
         }
     }
 
-    static class Intern extends Employee {
-        Intern(String name, int base) {
-            super(name, base);
-        }
-
+    static class Whisper implements Formatter {
         @Override
-        int monthlyPay() {
-            return base/2;
+        public String format(String s) {
+            return s.toLowerCase();
+        }
+    }
+
+    static class Reverse implements Formatter {
+        @Override
+        public String format(String s) {
+            return new StringBuilder(s).reverse().toString();
         }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        Employee[] staff = new Employee[n];
-        for (int i = 0; i < n; i++) {
-            String kind = sc.next();
-            String name = sc.next();
-            int base = sc.nextInt();
-            if (kind.equals("M")) {
-                staff[i] = new Manager(name, base, sc.nextInt());
-            } else if (kind.equals("I")) {
-                staff[i] = new Intern(name, base);
+        String msg = sc.nextLine();
+        int k = Integer.parseInt(sc.nextLine().trim());
+        Formatter all = s -> s;
+        for (int i = 0; i < k; i++) {
+            String rule = sc.nextLine().trim();
+            Formatter f;
+            if (rule.equals("shout")) {
+                f = new Shout();
+            } else if (rule.equals("whisper")) {
+                f = new Whisper();
             } else {
-                staff[i] = new Employee(name, base);
+                f = new Reverse();
             }
+            all = all.andThen(f);
         }
-        int total = 0;
-        for (Employee e : staff) {
-            System.out.println(e.describe());
-            total += e.monthlyPay();
-        }
-        System.out.println("Total: " + total);
+        System.out.println(all.format(msg));
     }
 }
