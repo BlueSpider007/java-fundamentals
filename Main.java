@@ -3,11 +3,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String name = sc.nextLine();
-        int qty = Integer.parseInt(sc.nextLine().trim());
-        double price = Double.parseDouble(sc.nextLine().trim());
-        price *= qty;
-
-        System.out.printf("%-12s%4d%10.2f%n",name,qty,price);
+        int year = sc.nextInt();
+        boolean b;
+        if (year % 400 == 0) {
+            b = true;
+        } else if (year % 100 == 0) {
+            b = false;
+        } else {
+            b = year % 4 == 0 ? true : false;
+        }
+        System.out.println(b?"leap":"common");
     }
 }
