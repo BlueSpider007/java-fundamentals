@@ -1,29 +1,46 @@
 import java.util.Scanner;
 
 public class Main {
-    static boolean isPrime(int n) {
-        if (n == 0 || n == 1 || n < 0) {
-            return false;
-        } else {
-            boolean prime = true;
-            for (int i = 2; i < n; i++) {
-                if (n%i == 0) {
-                    prime = false;
-                }
+    static class Account {
+        private int balance;
+        Account(int opening) {
+            balance = opening;
+        }
+
+        void deposit(int amount) {
+            if (amount > 0) {
+                balance += amount;
             }
-            return prime;
+        }
+
+        boolean withdraw(int amount) {
+            if (0 < amount && amount <= balance) {
+                balance -= amount;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        int getBalance() {
+            return balance;
         }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        for (int k = 0; k < t; k++) {
-            int n = sc.nextInt();
-            if (isPrime(n)) {
-                System.out.println(n + " is prime");
+        Account acct = new Account(sc.nextInt());
+        int n = sc.nextInt();
+        for (int i = 0; i < n; i++) {
+            String cmd = sc.next();
+            if (cmd.equals("deposit")) {
+                acct.deposit(sc.nextInt());
+            } else if (cmd.equals("withdraw")) {
+                if (!acct.withdraw(sc.nextInt())) {
+                    System.out.println("insufficient funds");
+                }
             } else {
-                System.out.println(n + " is not prime");
+                System.out.println("balance: " + acct.getBalance());
             }
         }
     }
