@@ -1,53 +1,32 @@
 import java.util.Scanner;
 
 public class Main {
-    interface Formatter {
-        String format(String s);
-
-        // TODO: apply this formatter first, then next.
-        default Formatter andThen(Formatter next) {
-            return s -> next.format(this.format(s));
+    static String evaluate(String line) {
+        // TODO: return the result, or "bad format" / "bad number" / "divide by zero".
+        String[] parts = line.split("/");
+        if (parts.length != 2) {
+            return "bad format";
         }
-    }
+        try {
+            int a = Integer.parseInt(parts[0]);
+            int b = Integer.parseInt(parts[1]);
+            if (b == 0) {
+                throw new ArithmeticException();
+            }
 
-    static class Shout implements Formatter {
-        @Override
-        public String format(String s) {
-            return s.toUpperCase()+"!";
-        }
-    }
-
-    static class Whisper implements Formatter {
-        @Override
-        public String format(String s) {
-            return s.toLowerCase();
-        }
-    }
-
-    static class Reverse implements Formatter {
-        @Override
-        public String format(String s) {
-            return new StringBuilder(s).reverse().toString();
+            return String.valueOf(a/b);
+        } catch (NumberFormatException e) {
+            return "bad number";
+        } catch (ArithmeticException e) {
+            return "divide by zero";
         }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String msg = sc.nextLine();
-        int k = Integer.parseInt(sc.nextLine().trim());
-        Formatter all = s -> s;
-        for (int i = 0; i < k; i++) {
-            String rule = sc.nextLine().trim();
-            Formatter f;
-            if (rule.equals("shout")) {
-                f = new Shout();
-            } else if (rule.equals("whisper")) {
-                f = new Whisper();
-            } else {
-                f = new Reverse();
-            }
-            all = all.andThen(f);
+        int n = Integer.parseInt(sc.nextLine().trim());
+        for (int i = 0; i < n; i++) {
+            System.out.println(evaluate(sc.nextLine()));
         }
-        System.out.println(all.format(msg));
     }
 }
